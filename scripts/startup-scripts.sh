@@ -55,11 +55,15 @@ echo "${mpgvolume} is the mpg123 startup volume"
 #######################
 # re-scan music library
 # if spotify edition is installed, update via mopidy as mpc update doesnt work
+# gordibox: library scan at boot is optional (settings/ScanOnBoot = ON), default off to speed up boot.
+# Rescan on demand from the web UI (Manage Files and Folders > local scan) or: playout_controls.sh -c=scan
+if [ "$(cat $PATHDATA/../settings/ScanOnBoot 2>/dev/null)" == "ON" ]; then
 if [ "$EDITION" == "plusSpotify" ]; then
     sudo mopidyctl local scan > /dev/null 2>&1
 else
     mpc rescan
-fi 
+fi
+fi
 
 #######################
 # read out wifi config?
