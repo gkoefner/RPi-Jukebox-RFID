@@ -5,6 +5,15 @@ import os
 import pathlib
 
 
+def _service(name):
+    # gordibox resident service first (about 10 ms); False -> run the old script
+    try:
+        import urllib.request
+        return urllib.request.urlopen('http://127.0.0.1:8765/cmd/' + name, timeout=2).status == 200
+    except Exception:
+        return False
+
+
 class phoniebox_function_calls:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -38,15 +47,21 @@ class phoniebox_function_calls:
         function_call("{command} -c=mute".format(command=self.playout_control), shell=True)
 
     def functionCallPlayerNext(self, *args):
+        if _service('next'):
+            return
         function_call("{command} -c=playernext".format(command=self.playout_control), shell=True)
 
     def functionCallPlayerPrev(self, *args):
+        if _service('prev'):
+            return
         function_call("{command} -c=playerprev".format(command=self.playout_control), shell=True)
 
     def functionCallPlayerPauseForce(self, *args):
         function_call("{command} -c=playerpauseforce".format(command=self.playout_control), shell=True)
 
     def functionCallPlayerPause(self, *args):
+        if _service('toggle'):
+            return
         function_call("{command} -c=playerpause".format(command=self.playout_control), shell=True)
 
     def functionCallRecordStart(self, *args):
