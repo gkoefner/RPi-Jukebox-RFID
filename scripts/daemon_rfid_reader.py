@@ -96,7 +96,16 @@ while True:
         if cardid is not None:
             if cardid != previous_id or (time.time() - previous_time) >= float(same_id_delay) or cardid in str(ids):
                 logger.info('Trigger Play Cardid={cardid}'.format(cardid=cardid))
-                subprocess.call([dir_path + '/rfid_trigger_play.sh --cardid=' + cardid], shell=True)
+                # gordibox: ask the resident player service first (about 0.15 s). It answers 200 only when it started the card;
+                # for unknown cards, command cards, or if the service is down we fall through to the original shell chain.
+                handled = False
+                try:
+                    import urllib.request
+                    handled = urllib.request.urlopen('http://127.0.0.1:8765/swipe/' + cardid, timeout=4).status == 200
+                except Exception:
+                    handled = False
+                if not handled:
+                    subprocess.call([dir_path + '/rfid_trigger_play.sh --cardid=' + cardid], shell=True)
                 previous_id = cardid
 
             else:
