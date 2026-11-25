@@ -101,7 +101,7 @@ while True:
                 handled = False
                 try:
                     import urllib.request
-                    handled = urllib.request.urlopen('http://127.0.0.1:8765/swipe/' + cardid, timeout=4).status == 200
+                    handled = urllib.request.urlopen('http://127.0.0.1:8765/swipe/' + cardid, timeout=8).status == 200
                 except Exception:
                     handled = False
                 if not handled:

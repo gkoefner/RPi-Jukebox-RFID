@@ -1,0 +1,6 @@
+[Unit]
+Description=gordibox: scan Mopidy library if audio files changed
+[Service]
+Type=oneshot
+User=pi
+ExecStart=/usr/local/bin/gordibox-autoscan.sh

@@ -1,0 +1,13 @@
+[Unit]
+Description=gordibox resident player (card swipe fast path)
+After=mopidy.service phoniebox-startup-scripts.service
+Wants=mopidy.service
+[Service]
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/usr/bin/python3 /home/pi/gordibox_player.py --port 8765
+Restart=always
+RestartSec=2
+Nice=-2
+[Install]
+WantedBy=multi-user.target

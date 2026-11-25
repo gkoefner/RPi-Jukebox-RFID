@@ -1,0 +1,10 @@
+[Unit]
+Description=gordibox: restart Mopidy when it wedges after a failed track
+After=mopidy.service
+
+[Service]
+ExecStart=/usr/local/bin/gordibox-mopidy-heal.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
